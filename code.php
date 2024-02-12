@@ -1,72 +1,60 @@
 <?php
-if ($_POST) {
+// Définit temporairement la configuration pour masquer les avertissements de dépréciation
+ini_set('display_errors', 'Off');
+
+session_start();
+
+// Vérification de l'action à effectuer
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
+    $action = $_POST['action'];
+
+    // Connexion à la base de données
     $chemin_fichier_json = 'database.json';
+    $data = [];
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-// Récupérer les valeurs du formulaire
-    switch ($_POST['etat']) {
-        case 'inscription':
+    // Vérification du type d'action
+    if ($action == "inscription") {
+        // Récupération des données du formulaire
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
-// Récupérer le contenu du fichier JSON
-            $json_contenu = file_get_contents($chemin_fichier_json);
-// Décoder le JSON en une structure de données PHP
-            $data = json_decode($json_contenu, true);
+        // Hachage du mot de passe
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-// Vérifier si la conversion a réussi
-            if ($data === null) {
-                echo "Échec de la lecture du fichier JSON!!!";
-            } else {
-                $trouve = false;
-                foreach ($data as $element) {
-                    if ($element['id'] === $email) {
-                        $trouve = true;
-                        break;
-                    }
-                }
-                if ($trouve) {
-                    echo "Erreur d'inscription : Compte déjà existant!!!";
-                } else {
-                    // Ajouter une nouvelle entrée au tableau
-                    $nouvelle_entree = array("id" => $email, "mdp" => $chaine_base64 = base64_encode($password));
-                    array_push($data, $nouvelle_entree);
+        // Lecture des données existantes
+        $data = file_exists($chemin_fichier_json) ? json_decode(file_get_contents($chemin_fichier_json), true) : [];
 
-                    // Encoder le tableau mis à jour en JSON
-                    $nouveau_json = json_encode($data, JSON_PRETTY_PRINT);
+        // Vérification si l'email existe déjà
+        if (isset($data[$email])) {
+            echo "Erreur d'inscription : Compte déjà existant!!!";
+        } else {
+            // Ajout du nouvel utilisateur
+            $data[$email] = $password_hash;
 
-                    // Écrire les données mises à jour dans le fichier JSON
-                    if (file_put_contents($chemin_fichier_json, $nouveau_json)) {
-                        echo "Inscription réussie.";
-                    } else {
-                        echo "Une erreur est survenue lors de l'écriture dans le fichier!!!";
-                    }
-                }
+            // Écriture des données dans le fichier
+            file_put_contents($chemin_fichier_json, json_encode($data));
 
-            }
-            break;
-        case 'connexion':
-            $json_contenu = file_get_contents($chemin_fichier_json);
-            $data = json_decode($json_contenu, true);
-// Vérifier si la conversion a réussi
-            if ($data === null) {
-                echo "Échec de la lecture du fichier JSON!!!!";
-            } else {
-                // Vérifier si l'email et le mot de passe existent déjà
-                $trouve = false;
-                foreach ($data as $element) {
-                    if ($element['id'] === $email && base64_encode($password) === $element['mdp']) {
-                        $trouve = true;
-                        break;
-                    }
-                }
-                if ($trouve) {
-                    echo "Connexion établie avec succès.";
-                } else {
-                    echo "
-                    Échec de connexion!!!";
-                }
-            }
-            break;
+            echo "Inscription réussie.";
+        }
+    } elseif ($action == "connexion") {
+        // Récupération des données du formulaire
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+
+        // Lecture des données existantes
+        $data = file_exists($chemin_fichier_json) ? json_decode(file_get_contents($chemin_fichier_json), true) : [];
+
+        // Vérification de l'utilisateur
+        if (isset($data[$email]) && password_verify($password, $data[$email])) {
+            // Affiche un message de connexion réussie sans afficher d'avertissement de dépréciation
+            echo "Connexion établie avec succès.";
+        } else {
+            echo "Échec de connexion!!!";
+        }
+    } else {
+        echo "Action non autorisée!";
     }
+} else {
+    echo "Méthode de requête non autorisée!";
 }
 ?>
