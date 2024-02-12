@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire</title>
+    <title>Formulaire de Connexion</title>
     <link rel="stylesheet" href="design.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
     <div class="form-box">
         <div id="corps">
             <form id="login" class="input-group">
-                <input id="email" class="input-field" name="email" placeholder="E-mail" type="email" value="Anass@aaa.aa" required>
+                <input id="email" class="input-field" name="email" placeholder="E-mail" type="email" value="Yacine@berkani.fr" required>
                 <input id="password" class="input-field" name="password"  placeholder="Mot de passe" type="password" value="aaa" required>
                 <div class="button-box">
                     <button type="button" class="toggle-btn" onclick="resetForm()">Reset</button>
@@ -20,8 +20,6 @@
                     <button type="button" class="toggle-btn" onclick="logInFrom()">Connexion</button>
                 </div>
             </form>
-
-
         </div>
     </div>
 </div>
@@ -46,8 +44,7 @@
                 resetForm();
             }
         };
-        xhr.send('etat=inscription&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password));
-
+        xhr.send('action=inscription&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password));
     }
 
     function logInFrom() {
@@ -64,7 +61,7 @@
                 resetForm();
             }
         };
-        xhr.send('etat=connexion&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password));
+        xhr.send('action=connexion&email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password));
     }
 </script>
 </body>
