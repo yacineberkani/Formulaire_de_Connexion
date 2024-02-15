@@ -3,33 +3,16 @@
     padding: 0;
 }
 
-.hero {
+.hero{
     height: 100%;
     width: 100%;
     background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("img.webp");
     background-position: center;
     background-size: cover;
     position: absolute;
-    /* Positionner le contenu au centre de la page */
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* Ajout du style pour le logo */
-.logo {
-    width: 150px; /* Ajuster la largeur selon vos besoins */
-    height: 150px; /* Ajuster la hauteur selon vos besoins */
-    background-image: url('logo.png');
-    background-size: contain; /* Ajuster la taille du logo tout en conservant les proportions */
-    background-repeat: no-repeat;
-    position: absolute; /* Position absolue pour placer le logo au centre */
-    top: 50%; /* Placer le logo au centre vertical */
-    left: 50%; /* Placer le logo au centre horizontal */
-    transform: translate(-50%, -50%); /* Centrer le logo parfaitement */
-}
-
-.form-box {
+.form-box{
     width: 380px;
     height: 480px;
     position: relative;
@@ -39,8 +22,12 @@
     border-radius: 30px;
 }
 
-/* Le reste de votre CSS reste inchangé */
-
+.button-box{
+    width: 270px; /* Ajusté pour plus d'espace */
+    margin: 70px auto;
+    position: relative;
+    box-shadow: 0 0 20px 9px #ff61241f;
+    border-radius: 30px;
     display: flex; /* Flexbox pour aligner les boutons */
     justify-content: center; /* Centrer les boutons horizontalement */
     align-items: center; /* Centrer les boutons verticalement */
