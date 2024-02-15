@@ -9,6 +9,7 @@
 </head>
 <body>
 <div class="hero">
+    <div class="logo"></div> <!-- Ajout du logo -->
     <div class="form-box">
         <div id="corps">
             <form id="login" class="input-group">
